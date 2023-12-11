@@ -16,6 +16,17 @@ Doorkeeper.configure do
     end
   end
 
+  admin_authenticator do |_routes|
+    current_user.try(:admin) ? current_user : redirect_to(new_user_session_path)
+  end
+
+  skip_authorization do
+    # allow all client apps to be "trusted"
+    true
+  end
+
+  default_scopes  :public
+
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
   # file then you need to declare this block in order to restrict access to the web interface for
   # adding oauth authorized applications. In other case it will return 403 Forbidden response
